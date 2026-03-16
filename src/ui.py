@@ -44,21 +44,63 @@ def inject_styles() -> None:
             --accent: #16324f;
             --badge-bg: #e9f4ee;
             --badge-text: #165b47;
+            --input-bg: rgba(255, 255, 255, 0.92);
+            --input-border: rgba(38, 70, 83, 0.12);
+            --input-text: #14243a;
+            --input-placeholder: #728397;
+            --surface-soft: rgba(236, 244, 248, 0.8);
+            --alert-info-bg: rgba(219, 234, 254, 0.72);
+            --alert-success-bg: rgba(220, 252, 231, 0.72);
+            --alert-warning-bg: rgba(254, 249, 195, 0.82);
+            --alert-text: #102132;
         }
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg-main: linear-gradient(180deg, #09111a 0%, #0d1621 100%);
                 --bg-spot-a: rgba(63, 94, 251, 0.18);
                 --bg-spot-b: rgba(42, 157, 143, 0.16);
-                --card-bg: rgba(11, 24, 37, 0.82);
-                --card-border: rgba(159, 196, 255, 0.16);
-                --card-shadow: rgba(0, 0, 0, 0.28);
-                --text-main: #f5f8fb;
-                --text-muted: #c7d5e4;
+                --card-bg: rgba(13, 23, 35, 0.88);
+                --card-border: rgba(162, 190, 214, 0.18);
+                --card-shadow: rgba(0, 0, 0, 0.34);
+                --text-main: #f6f9fc;
+                --text-muted: #d3deea;
                 --accent: #d9ecff;
                 --badge-bg: rgba(56, 101, 86, 0.40);
                 --badge-text: #d9f7ea;
+                --input-bg: rgba(18, 31, 46, 0.96);
+                --input-border: rgba(162, 190, 214, 0.22);
+                --input-text: #f6f9fc;
+                --input-placeholder: #9eb1c6;
+                --surface-soft: rgba(17, 31, 46, 0.92);
+                --alert-info-bg: rgba(30, 58, 95, 0.88);
+                --alert-success-bg: rgba(17, 64, 45, 0.88);
+                --alert-warning-bg: rgba(92, 64, 18, 0.88);
+                --alert-text: #f6f9fc;
             }
+        }
+        html[data-theme="dark"],
+        body[data-theme="dark"],
+        .stApp[data-theme="dark"] {
+            --bg-main: linear-gradient(180deg, #09111a 0%, #0d1621 100%);
+            --bg-spot-a: rgba(63, 94, 251, 0.18);
+            --bg-spot-b: rgba(42, 157, 143, 0.16);
+            --card-bg: rgba(13, 23, 35, 0.88);
+            --card-border: rgba(162, 190, 214, 0.18);
+            --card-shadow: rgba(0, 0, 0, 0.34);
+            --text-main: #f6f9fc;
+            --text-muted: #d3deea;
+            --accent: #d9ecff;
+            --badge-bg: rgba(56, 101, 86, 0.40);
+            --badge-text: #d9f7ea;
+            --input-bg: rgba(18, 31, 46, 0.96);
+            --input-border: rgba(162, 190, 214, 0.22);
+            --input-text: #f6f9fc;
+            --input-placeholder: #9eb1c6;
+            --surface-soft: rgba(17, 31, 46, 0.92);
+            --alert-info-bg: rgba(30, 58, 95, 0.88);
+            --alert-success-bg: rgba(17, 64, 45, 0.88);
+            --alert-warning-bg: rgba(92, 64, 18, 0.88);
+            --alert-text: #f6f9fc;
         }
         .stApp {
             background:
@@ -192,19 +234,61 @@ def inject_styles() -> None:
             border: 1px solid var(--card-border);
             padding: 0.35rem;
         }
+        [data-testid="stDataFrame"] * {
+            color: var(--text-main) !important;
+        }
         [data-testid="stSidebar"] {
             background: linear-gradient(180deg, rgba(50, 70, 94, 0.94) 0%, rgba(63, 88, 110, 0.94) 100%);
         }
         [data-testid="stSidebar"] * {
             color: #f4f8fc !important;
         }
-        .stTextInput input, .stSelectbox div[data-baseweb="select"] > div, .stMultiSelect div[data-baseweb="select"] > div {
-            background: var(--card-bg) !important;
+        .stTextInput input,
+        .stTextArea textarea,
+        .stNumberInput input,
+        .stSelectbox div[data-baseweb="select"] > div,
+        .stMultiSelect div[data-baseweb="select"] > div {
+            background: var(--input-bg) !important;
+            color: var(--input-text) !important;
+            border: 1px solid var(--input-border) !important;
+            box-shadow: none !important;
+        }
+        .stTextInput input::placeholder,
+        .stTextArea textarea::placeholder,
+        .stNumberInput input::placeholder {
+            color: var(--input-placeholder) !important;
+            opacity: 1 !important;
+        }
+        .stTextInput label,
+        .stTextArea label,
+        .stNumberInput label,
+        .stSelectbox label,
+        .stMultiSelect label {
             color: var(--text-main) !important;
-            border: 1px solid var(--card-border) !important;
+            font-weight: 600;
+        }
+        div[data-baseweb="popover"] *,
+        div[role="listbox"] *,
+        ul[role="listbox"] * {
+            color: var(--input-text) !important;
+        }
+        div[data-baseweb="popover"],
+        div[role="listbox"],
+        ul[role="listbox"] {
+            background: var(--input-bg) !important;
+            border: 1px solid var(--input-border) !important;
+        }
+        div[role="option"] {
+            background: transparent !important;
+        }
+        div[role="option"][aria-selected="true"] {
+            background: var(--surface-soft) !important;
         }
         .stSlider [data-baseweb="slider"] {
             padding-top: 0.25rem;
+        }
+        .stSlider [data-baseweb="thumb"] {
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35);
         }
         .stButton button, .stDownloadButton button {
             border-radius: 999px;
@@ -213,6 +297,31 @@ def inject_styles() -> None:
             color: #ffffff !important;
             padding: 0.55rem 1rem;
             font-weight: 600;
+        }
+        [data-testid="stAlert"] {
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
+            color: var(--alert-text) !important;
+        }
+        [data-testid="stAlert"] * {
+            color: var(--alert-text) !important;
+        }
+        [data-testid="stAlert"][kind="info"] {
+            background: var(--alert-info-bg) !important;
+        }
+        [data-testid="stAlert"][kind="success"] {
+            background: var(--alert-success-bg) !important;
+        }
+        [data-testid="stAlert"][kind="warning"] {
+            background: var(--alert-warning-bg) !important;
+        }
+        .stMarkdown strong,
+        .stCaption,
+        .stCaption * {
+            color: var(--text-main) !important;
+        }
+        .stProgress > div > div {
+            background: linear-gradient(90deg, #8be9c4 0%, #4fd1c5 100%) !important;
         }
         .hero {
             padding: 1.2rem 1.5rem;
@@ -333,7 +442,7 @@ def inject_styles() -> None:
             margin: 1rem 0 1.15rem 0;
         }
         .section-nav-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.86) 0%, rgba(238, 246, 250, 0.82) 100%);
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--surface-soft) 100%);
             border: 1px solid var(--card-border);
             border-radius: 20px;
             padding: 1rem 1.05rem;
@@ -363,7 +472,7 @@ def inject_styles() -> None:
             margin-bottom: 1.1rem;
         }
         .section-banner {
-            background: linear-gradient(135deg, rgba(22, 50, 79, 0.08) 0%, rgba(42, 157, 143, 0.08) 100%);
+            background: linear-gradient(135deg, var(--surface-soft) 0%, var(--card-bg) 100%);
             border: 1px solid var(--card-border);
             border-radius: 22px;
             padding: 1rem 1.1rem;
