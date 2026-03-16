@@ -214,15 +214,6 @@ def inject_styles() -> None:
             padding: 0.55rem 1rem;
             font-weight: 600;
         }
-        .stTabs [data-baseweb="tab-list"] {
-            gap: 0.4rem;
-        }
-        .stTabs [data-baseweb="tab"] {
-            background: var(--card-bg);
-            border-radius: 999px;
-            border: 1px solid var(--card-border);
-            color: var(--text-main);
-        }
         .hero {
             padding: 1.2rem 1.5rem;
             margin-bottom: 1rem;
@@ -335,12 +326,76 @@ def inject_styles() -> None:
             font-size: 0.88rem;
             margin-top: 0.5rem;
         }
+        .section-nav {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.8rem;
+            margin: 1rem 0 1.15rem 0;
+        }
+        .section-nav-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.86) 0%, rgba(238, 246, 250, 0.82) 100%);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1rem 1.05rem;
+            box-shadow: 0 12px 24px var(--card-shadow);
+            backdrop-filter: blur(16px);
+        }
+        .section-nav-label {
+            font-size: 0.8rem;
+            letter-spacing: 0.04em;
+            color: var(--text-muted) !important;
+            text-transform: uppercase;
+            margin-bottom: 0.35rem;
+        }
+        .section-nav-title {
+            font-size: 1.12rem;
+            font-weight: 800;
+            margin-bottom: 0.22rem;
+            color: var(--accent) !important;
+        }
+        .section-nav-copy {
+            color: var(--text-muted) !important;
+            line-height: 1.55;
+            font-size: 0.92rem;
+        }
+        .content-section {
+            margin-top: 1.15rem;
+            margin-bottom: 1.1rem;
+        }
+        .section-banner {
+            background: linear-gradient(135deg, rgba(22, 50, 79, 0.08) 0%, rgba(42, 157, 143, 0.08) 100%);
+            border: 1px solid var(--card-border);
+            border-radius: 22px;
+            padding: 1rem 1.1rem;
+            margin-bottom: 0.95rem;
+        }
+        .section-kicker {
+            color: var(--text-muted) !important;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.76rem;
+            margin-bottom: 0.25rem;
+        }
+        .section-heading {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--accent) !important;
+            margin-bottom: 0.2rem;
+        }
+        .section-desc {
+            color: var(--text-muted) !important;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
         @media (max-width: 980px) {
             .stat-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
             .step-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .section-nav {
+                grid-template-columns: 1fr;
             }
         }
         </style>
@@ -495,6 +550,46 @@ def render_metrics(ranked_df: pd.DataFrame) -> None:
         unsafe_allow_html=True,
     )
     st.caption(f"目前平均綜合分數為 {avg_score}，此頁以台中市示範資料呈現分析流程。")
+
+
+def render_section_nav() -> None:
+    st.markdown(
+        """
+        <div class="section-nav">
+            <div class="section-nav-card">
+                <div class="section-nav-label">Overview</div>
+                <div class="section-nav-title">總覽地圖</div>
+                <div class="section-nav-copy">先看分數分布、地圖熱點與整體排行，快速掌握示範區域差異。</div>
+            </div>
+            <div class="section-nav-card">
+                <div class="section-nav-label">Insight</div>
+                <div class="section-nav-title">AI 與單區分析</div>
+                <div class="section-nav-copy">往下即可看到單區深入解讀、權重貢獻與 AI 問答內容，不需要切頁。</div>
+            </div>
+            <div class="section-nav-card">
+                <div class="section-nav-label">Compare</div>
+                <div class="section-nav-title">區域比較與匯出</div>
+                <div class="section-nav-copy">最後直接接續多區比較與資料匯出，整體閱讀流程更像正式產品頁。</div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_section_banner(kicker: str, title: str, description: str) -> None:
+    st.markdown(
+        f"""
+        <div class="content-section">
+            <div class="section-banner">
+                <div class="section-kicker">{kicker}</div>
+                <div class="section-heading">{title}</div>
+                <p class="section-desc">{description}</p>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_map(df: pd.DataFrame, focus_region: str | None = None) -> None:
@@ -738,23 +833,20 @@ def run_app() -> None:
     weights = render_sidebar()
     ranked_df = calculate_livability_score(load_regions(), weights)
     render_metrics(ranked_df)
+    render_section_nav()
 
     queried_region = render_address_search(ranked_df)
+    render_section_banner("Overview", "區域地圖總覽", "從地圖、點位大小與分數排行一起判讀目前示範資料的空間分布。")
+    render_map(ranked_df, queried_region)
+    render_rankings(ranked_df)
 
-    overview_tab, insight_tab, compare_tab = st.tabs(["總覽地圖", "AI 與單區分析", "區域比較與匯出"])
+    render_section_banner("Insight", "AI 與單區分析", "這裡集中展示單一區域的加權拆解、摘要判讀與 AI 建議。")
+    left, right = st.columns([1.1, 0.9])
+    with left:
+        render_region_analysis(ranked_df, weights, queried_region)
+    with right:
+        render_ai_panel(ranked_df)
 
-    with overview_tab:
-        st.markdown('<div class="section-title">區域地圖總覽</div>', unsafe_allow_html=True)
-        render_map(ranked_df, queried_region)
-        render_rankings(ranked_df)
-
-    with insight_tab:
-        left, right = st.columns([1.1, 0.9])
-        with left:
-            render_region_analysis(ranked_df, weights, queried_region)
-        with right:
-            render_ai_panel(ranked_df)
-
-    with compare_tab:
-        render_compare(ranked_df)
-        render_export(ranked_df)
+    render_section_banner("Compare", "區域比較與匯出", "直接往下延伸到多區比較與資料下載，整個分析流程不需要切換頁籤。")
+    render_compare(ranked_df)
+    render_export(ranked_df)
