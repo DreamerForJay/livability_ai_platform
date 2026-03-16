@@ -69,3 +69,50 @@ def answer_question(question: str, ranked_df: pd.DataFrame) -> str:
         f"依目前資料，整體表現最好的是 {top['region_name']}，最低的是 {bottom['region_name']}。"
         "如果你要 Demo，建議比較前兩名與後兩名，最容易把差異說清楚。"
     )
+
+
+def persona_recommendations(row: pd.Series) -> list[str]:
+    recommendations = []
+
+    if row["facility_score"] >= 85 and row["transport_score"] >= 85:
+        recommendations.append("適合學生租屋與通勤族")
+    if row["public_service_score"] >= 84 and row["risk_score"] <= 35:
+        recommendations.append("適合家庭居住與親子生活")
+    if row["facility_score"] >= 85 and row["risk_score"] <= 35:
+        recommendations.append("適合小型商業設點")
+    if row["air_quality_score"] >= 80 and row["risk_score"] <= 30:
+        recommendations.append("適合長期居住規劃")
+
+    if not recommendations:
+        recommendations.append("較適合作為過渡型或條件型選址")
+
+    return recommendations
+
+
+def score_badges(row: pd.Series) -> list[str]:
+    badges = []
+
+    if row["facility_score"] >= 85:
+        badges.append("高機能")
+    if row["transport_score"] >= 85:
+        badges.append("高交通便利")
+    if row["public_service_score"] >= 85:
+        badges.append("公共資源完整")
+    if row["risk_score"] >= 40:
+        badges.append("需注意風險")
+    elif row["risk_score"] <= 30:
+        badges.append("低風險")
+
+    return badges
+
+
+def compare_regions(compare_df: pd.DataFrame) -> str:
+    if compare_df.empty:
+        return "請先選擇要比較的區域。"
+
+    top = compare_df.sort_values("livability_score", ascending=False).iloc[0]
+    weakest = compare_df.sort_values("livability_score").iloc[0]
+    return (
+        f"在目前比較組合中，{top['region_name']} 整體表現最佳，綜合分數 {top['livability_score']}；"
+        f"{weakest['region_name']} 相對需要更多條件補強。建議簡報時聚焦生活機能、交通便利與風險分數三個差異最大的面向。"
+    )
