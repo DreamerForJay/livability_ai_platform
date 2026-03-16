@@ -1,0 +1,387 @@
+# 一、目前 UI 的主要問題
+
+## 1️⃣ 左側 Sidebar 太重
+
+問題：
+
+* 左側顏色 **太深**
+* 對比太強
+* 視覺焦點被吸走
+
+結果：
+
+👉 使用者注意力不在「分析結果」
+
+建議：
+
+```
+sidebar顏色亮一點
+降低飽和度
+```
+
+例如
+
+```
+bg-slate-800 → bg-slate-700
+```
+
+或
+
+```
+bg-[#1f2937]
+```
+
+---
+
+## 2️⃣ Hero 區塊太高
+
+這一塊：
+
+```
+臺灣宜居地智慧分析平台
+```
+
+高度過高。
+
+問題：
+
+* 佔太多 vertical space
+* Dashboard應該 **資訊密度高**
+
+建議：
+
+```
+高度減少 30%
+```
+
+---
+
+## 3️⃣ Card 設計太扁平
+
+目前：
+
+```
+最佳區域
+最高分
+最低風險
+高機能代表
+```
+
+問題：
+
+* 沒有 icon
+* 沒有 visual hierarchy
+* 資訊層級不明確
+
+建議：
+
+每個 card：
+
+```
+icon
+title
+value
+subtext
+```
+
+例如
+
+```
+🏆 最佳區域
+台中市西屯區
+```
+
+---
+
+## 4️⃣ 查詢區域 UX 不夠強
+
+目前：
+
+```
+輸入框
+建議列表
+```
+
+問題：
+
+* 沒有搜尋 icon
+* 沒有 autocomplete UI
+* 不像 modern SaaS
+
+建議：
+
+```
+search icon
+placeholder hint
+dropdown suggestion
+```
+
+---
+
+## 5️⃣ 左側 slider UX
+
+問題：
+
+現在 slider：
+
+```
+0.25
+0.25
+0.20
+0.15
+0.15
+```
+
+但使用者不知道：
+
+```
+總和是否 = 1
+```
+
+建議：
+
+加入
+
+```
+Total weight: 1.00
+```
+
+或
+
+```
+Progress bar
+```
+
+---
+
+# 二、視覺層級問題
+
+目前層級：
+
+```
+Hero
+Card
+Input
+結果
+```
+
+問題：
+
+**結果區不夠突出**
+
+例如：
+
+```
+台中市西屯區
+```
+
+應該更醒目。
+
+建議：
+
+```
+font-size: 40px
+font-weight: bold
+```
+
+---
+
+# 三、Dark Mode問題
+
+你自己也提到：
+
+> 切深色有些字會看不到
+
+常見原因：
+
+### 沒有 dark variant
+
+例如
+
+錯誤：
+
+```
+text-gray-800
+```
+
+正確：
+
+```
+text-gray-800 dark:text-gray-200
+```
+
+---
+
+### Card背景沒有切換
+
+錯誤：
+
+```
+bg-white
+```
+
+正確：
+
+```
+bg-white dark:bg-slate-800
+```
+
+---
+
+# 四、整體產品 UX 問題
+
+目前頁面流程：
+
+```
+1 查詢
+2 定位
+3 分析
+4 建議
+```
+
+但 UI 看起來像：
+
+```
+全部一起顯示
+```
+
+建議改為：
+
+### Step UI
+
+```
+Step1 搜尋
+Step2 定位
+Step3 分析
+Step4 建議
+```
+
+這樣更像 AI 分析工具。
+
+---
+
+# 五、我給你 AI UI 優化提示詞（強）
+
+你可以直接給 AI：
+
+---
+
+## Prompt 1（UI redesign）
+
+```
+Redesign this dashboard UI to look like a modern SaaS analytics platform.
+
+Requirements:
+- Improve visual hierarchy
+- Reduce hero section height
+- Make the results section more prominent
+- Add icons to summary cards
+- Improve sidebar usability
+- Use a clean spacing system
+- Add subtle shadows and rounded corners
+- Follow modern dashboard design patterns (like Stripe, Linear, Vercel)
+
+Ensure the design works well in both light mode and dark mode.
+```
+
+---
+
+## Prompt 2（Dark mode fix）
+
+```
+Audit this UI for dark mode compatibility.
+
+Tasks:
+- Ensure all text colors are visible in dark mode
+- Add dark variants for background, borders, and text
+- Maintain proper contrast ratio (WCAG AA)
+- Fix any components where text becomes unreadable
+- Use Tailwind dark mode best practices
+```
+
+---
+
+## Prompt 3（UX改造）
+
+```
+Improve the UX of this location analysis dashboard.
+
+Focus on:
+
+- Better search experience (autocomplete, suggestions)
+- Clear analysis steps (search → locate → analyze → recommendation)
+- Improve slider usability with weight validation
+- Highlight the final recommendation results
+- Make the UI feel more like an AI-powered decision tool
+```
+
+---
+
+## Prompt 4（專業 SaaS UI）
+
+```
+Transform this interface into a professional SaaS dashboard.
+
+Requirements:
+
+- Modern analytics layout
+- Card-based information hierarchy
+- Improved sidebar navigation
+- Add micro-interactions
+- Add icons to key metrics
+- Improve spacing and grid layout
+- Ensure responsive design
+```
+
+---
+
+# 六、如果是我會改的版本（最重要）
+
+我會做 **3個改動**：
+
+### 1️⃣ 搜尋區塊
+
+做成：
+
+```
+AI search bar
+```
+
+像 Perplexity
+
+---
+
+### 2️⃣ 結果區塊
+
+做成：
+
+```
+Score visualization
+```
+
+例如
+
+```
+宜居指數 83.45
+█████████░░
+```
+
+---
+
+### 3️⃣ 地圖
+
+加入：
+
+```
+heatmap
+```
+
+直接顯示
+
+```
+宜居度
+```
+
+---
+
+
